@@ -1,20 +1,16 @@
 ﻿using Logging.Core;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Logging.Core
+namespace Logging.Core.Output
 {
-    public sealed class CallerInfo
-    {
-        public string Origin { get; set; }
-        public string FilePath { get; set; }
-        public int LineNumber { get; set; }
-    }
 
     public sealed class LogFormat
     {
 
+        [JsonConverter(typeof(LogLevelConverter))]
         public LogLevel LogLevel { get; set; }
 
         public string Message { get; set; }

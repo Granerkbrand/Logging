@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Logging.Core.Output;
+using System;
 using System.Collections.Generic;
 using System.Text;
 

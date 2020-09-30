@@ -1,8 +1,8 @@
 ﻿using Logging.Core;
+using Logging.Core.Output;
+using Logging.Logger.Helper;
 using System;
-using System.Collections.Generic;
 using System.Text;
-using System.Text.RegularExpressions;
 
 namespace Logging.Logger
 {
@@ -25,7 +25,9 @@ namespace Logging.Logger
                 }
             }
 
-            Console.WriteLine($"[{format.DateTime}] {@string}");
+            Console.ForegroundColor = format.LogLevel.GetConsoleColor();
+            Console.WriteLine($"[{format.DateTime}] {format.LogLevel.GetName(), -11}: {@string}");
+            Console.ResetColor();
         }
     }
 }

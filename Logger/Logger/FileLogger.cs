@@ -1,4 +1,5 @@
 ﻿using Logging.Core;
+using Logging.Core.Output;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;

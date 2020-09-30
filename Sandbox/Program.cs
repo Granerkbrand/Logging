@@ -21,12 +21,12 @@ namespace Sandbox
 
             for(int i = 0; i < 1000; ++i)
             {
-                loggingSystem.LogInformative("Test with {value} and Name {nickname} and double {value}", i, $"Max the {i}.");
+                loggingSystem.LogInformative("Test with {value} and Name {nickname} and double {value}.", i, $"Max the {i}.");
             }
-            loggingSystem.LogInformative("This is a {logtype} log", "great");
+            loggingSystem.LogInformative("This is a {logtype} log.", "great");
 
 
-            loggingSystem.LogError("This is a {adjective} Error. Please contact {contact}", ("contact", "fatal"), ("adjective", "nobody"));
+            loggingSystem.LogError("This is a {adjective} Error. Please contact {contact}.", ("contact", "fatal"), ("adjective", "nobody"));
         }
     }
 }
