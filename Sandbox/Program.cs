@@ -8,7 +8,10 @@ namespace Sandbox
     {
         static void Main()
         {
-            using ILoggingSystem<Program> loggingSystem = new LoggingSystem<Program>();
+            using ILoggingSystem<Program> loggingSystem = new LoggingSystem<Program>()
+            {
+                LoggingLevel = LoggingSystemLevel.Debug
+            };
 
             loggingSystem.AddLogger(new ConsoleLogger());
             loggingSystem.AddLogger(new FileLogger()
@@ -16,13 +19,14 @@ namespace Sandbox
                 LogThreshold = 1000
             });
 
-            loggingSystem.LoggingLevel = LoggingSystemLevel.Debug;
-
             for(int i = 0; i < 1000; ++i)
             {
-                loggingSystem.LogInformative("Test with {value}", i);
+                loggingSystem.LogInformative("Test with {value} and Name {nickname} and double {value}", i, $"Max the {i}.");
             }
-            loggingSystem.LogInformative("Das ist der {logtype} log", "Abschluss");
+            loggingSystem.LogInformative("This is a {logtype} log", "great");
+
+
+            loggingSystem.LogError("This is a {adjective} Error. Please contact {contact}", ("contact", "fatal"), ("adjective", "nobody"));
         }
     }
 }

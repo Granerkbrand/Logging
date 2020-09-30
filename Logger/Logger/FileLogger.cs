@@ -27,7 +27,7 @@ namespace Logging.Logger
 
             if (!File.Exists(Filepath))
             {
-                File.Create(Filepath);
+                File.Create(Filepath).Close();
             }
 
             _messages = JsonConvert.DeserializeObject<List<LogFormat>>(File.ReadAllText(Filepath)) ?? new List<LogFormat>();

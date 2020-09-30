@@ -15,23 +15,17 @@ namespace Logging.Logger
 
         public void Log(LogFormat format)
         {
-
-            Regex regex = new Regex(@"\b*{\w+}\b*");
-            var matches = regex.Matches(format.Message);
-
             StringBuilder @string = new StringBuilder(format.Message);
 
-            if (matches.Count == format.Parameters.Length)
+            if (format.Parameters.Count == format.Parameters.Count)
             {
-                for (int i = 0; i < matches.Count; ++i)
+                foreach (var parameter in format.Parameters)
                 {
-                    Match match = matches[i];
-                    @string.Remove(match.Index, match.Value.Length);
-                    @string.Insert(match.Index, format.Parameters[i]);
+                    @string.Replace($"{{{parameter.Key}}}", $"{parameter.Value}");
                 }
             }
 
-            Console.WriteLine($"[{format.DateTime:yyyy-MM-dd hh:mm:ss}] {@string}");
+            Console.WriteLine($"[{format.DateTime}] {@string}");
         }
     }
 }

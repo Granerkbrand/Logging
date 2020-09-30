@@ -19,12 +19,17 @@ namespace Logging.Core
 
         public string Message { get; set; }
 
-        public object[] Parameters { get; set; }
+        public Dictionary<string, object> Parameters { get; set; }
 
-        public DateTime DateTime { get; set; }
+        public string DateTime { get; set; }
 
         public Type LoggedFrom { get; set; }
 
         public CallerInfo CallerInfo { get; set; }
+
+        public LogFormat()
+        {
+            Parameters = new Dictionary<string, object>();
+        }
     }
 }
