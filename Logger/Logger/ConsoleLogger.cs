@@ -26,7 +26,7 @@ namespace Logging.Logger
             }
 
             Console.ForegroundColor = format.LogLevel.GetConsoleColor();
-            Console.WriteLine($"[{format.DateTime}] {format.LogLevel.GetName(), -11}: {@string}");
+            Console.WriteLine($"[{format.DateTime:yyyy-MM-dd hh:mm:ss}] {format.LogLevel.GetName(), -11}: {@string}");
             Console.ResetColor();
         }
     }

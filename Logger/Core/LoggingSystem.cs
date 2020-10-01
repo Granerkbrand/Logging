@@ -65,6 +65,16 @@ namespace Logging.Core
             Log(message, LogLevel.Error, parameters);
         }
 
+        public void LogError(string message, Exception exception, params object[] parameters)
+        {
+            Log(message, LogLevel.Error, exception, parameters);
+        }
+
+        public void LogError(string message, Exception exception, params (string, object)[] parameters)
+        {
+            Log(message, LogLevel.Error, exception, parameters);
+        }
+
         public void LogInformative(string message, params object[] parameters)
         {
             Log(message, LogLevel.Informative, parameters);
@@ -117,7 +127,7 @@ namespace Logging.Core
                 LogLevel = level,
                 Message = message,
                 Parameters = Formatter.FormatString(message, parameters),
-                DateTime = $"{DateTime.Now:yyyy-MM-dd hh:mm:ss}",
+                DateTime = DateTime.Now,
                 LoggedFrom = typeof(T),
                 CallerInfo = new CallerInfo()
                 {
@@ -125,6 +135,36 @@ namespace Logging.Core
                     FilePath = callStack.GetFileName(),
                     LineNumber = callStack.GetFileLineNumber()
                 }
+            };
+
+            lock (_lock)
+            {
+                _logger.ForEach(logger => logger.Log(logFormat));
+            }
+        }
+
+        private void Log(string message, LogLevel level, Exception exception, params object[] parameters)
+        {
+            if ((int)level > (int)LoggingLevel)
+                return;
+
+            StackFrame callStack = new StackFrame(2, true);
+
+            LogFormat logFormat = new LogFormat()
+            {
+                LogLevel = level,
+                Message = message,
+                Parameters = Formatter.FormatString(message, parameters),
+                DateTime = DateTime.Now,
+                LoggedFrom = typeof(T),
+                CallerInfo = new CallerInfo()
+                {
+                    Origin = callStack.GetMethod().Name,
+                    FilePath = callStack.GetFileName(),
+                    LineNumber = callStack.GetFileLineNumber()
+                },
+                ErrorMessage = exception.Message,
+                StackTrace = exception.StackTrace
             };
 
             lock (_lock)
@@ -145,7 +185,7 @@ namespace Logging.Core
                 LogLevel = level,
                 Message = message,
                 Parameters = parameters.ToDictionary(e => e.Item1, e => e.Item2),
-                DateTime = $"{DateTime.Now:yyyy-MM-dd hh:mm:ss}",
+                DateTime = DateTime.Now,
                 LoggedFrom = typeof(T),
                 CallerInfo = new CallerInfo()
                 {
@@ -153,6 +193,36 @@ namespace Logging.Core
                     FilePath = callStack.GetFileName(),
                     LineNumber = callStack.GetFileLineNumber()
                 }
+            };
+
+            lock (_lock)
+            {
+                _logger.ForEach(logger => logger.Log(logFormat));
+            }
+        }
+
+        private void Log(string message, LogLevel level, Exception exception, params (string, object)[] parameters)
+        {
+            if ((int)level > (int)LoggingLevel)
+                return;
+
+            StackFrame callStack = new StackFrame(2, true);
+
+            LogFormat logFormat = new LogFormat()
+            {
+                LogLevel = level,
+                Message = message,
+                Parameters = parameters.ToDictionary(e => e.Item1, e => e.Item2),
+                DateTime = DateTime.Now,
+                LoggedFrom = typeof(T),
+                CallerInfo = new CallerInfo()
+                {
+                    Origin = callStack.GetMethod().Name,
+                    FilePath = callStack.GetFileName(),
+                    LineNumber = callStack.GetFileLineNumber()
+                },
+                ErrorMessage = exception.Message,
+                StackTrace = exception.StackTrace
             };
 
             lock (_lock)

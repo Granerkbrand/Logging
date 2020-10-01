@@ -19,6 +19,8 @@ namespace Logging.Core
         void LogWarning(string message, params (string, object)[] parameters);
         void LogError(string message, params object[] parameters);
         void LogError(string message, params (string, object)[] parameters);
+        void LogError(string message, Exception exception, params object[] parameters);
+        void LogError(string message, Exception exception, params (string, object)[] parameters);
         void LogInformative(string message, params object[] parameters);
         void LogInformative(string message, params (string, object)[] parameters);
         void LogVerbose(string message, params object[] parameters);

@@ -1,8 +1,6 @@
-﻿using Logging.Core;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Logging.Core.Output
 {
@@ -17,15 +15,26 @@ namespace Logging.Core.Output
 
         public Dictionary<string, object> Parameters { get; set; }
 
-        public string DateTime { get; set; }
+        public DateTime DateTime { get; set; }
 
         public Type LoggedFrom { get; set; }
 
         public CallerInfo CallerInfo { get; set; }
 
+        public string ErrorMessage { get; set; }
+
+        public string StackTrace { get; set; }
+
         public LogFormat()
         {
             Parameters = new Dictionary<string, object>();
         }
+
+
+        [JsonIgnore]
+        public static JsonSerializerSettings SerializerSettings => new JsonSerializerSettings()
+        {
+            NullValueHandling = NullValueHandling.Ignore
+        };
     }
 }

@@ -31,7 +31,7 @@ namespace Logging.Logger
                 File.Create(Filepath).Close();
             }
 
-            _messages = JsonConvert.DeserializeObject<List<LogFormat>>(File.ReadAllText(Filepath)) ?? new List<LogFormat>();
+            _messages = JsonConvert.DeserializeObject<List<LogFormat>>(File.ReadAllText(Filepath), LogFormat.SerializerSettings) ?? new List<LogFormat>();
         }
 
         public void Log(LogFormat format)
@@ -53,7 +53,7 @@ namespace Logging.Logger
             lock (_messagesLock)
             {
                 //TODO: logging without load and save all log messages
-                File.WriteAllText(Filepath, JsonConvert.SerializeObject(_messages));
+                File.WriteAllText(Filepath, JsonConvert.SerializeObject(_messages, LogFormat.SerializerSettings));
             }
         }
     }

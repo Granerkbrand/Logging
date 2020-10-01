@@ -18,6 +18,12 @@ namespace Sandbox
             {
                 LogThreshold = 1000
             });
+            loggingSystem.AddLogger(new DatabaseLogger()
+            {
+                //Local test connection
+                ConnectionStringName = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=LoggingDB;Integrated Security=true;",
+                LogThreshold = 1000
+            });
 
             for(int i = 0; i < 1000; ++i)
             {
@@ -27,6 +33,15 @@ namespace Sandbox
 
 
             loggingSystem.LogError("This is a {adjective} Error. Please contact {contact}.", ("contact", "fatal"), ("adjective", "nobody"));
+
+            try
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+            catch(ArgumentOutOfRangeException e)
+            {
+                loggingSystem.LogError("{typ} error", e, ("typ", "small"));
+            }
         }
     }
 }
