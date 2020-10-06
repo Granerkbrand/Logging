@@ -5,8 +5,6 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Logging.Logger
 {
@@ -26,7 +24,7 @@ namespace Logging.Logger
         public FileLogger(string basepath = null)
         {
             Basepath = basepath;
-            string filepath = Path.Combine(basepath ?? Environment.CurrentDirectory, $"log{FileTimeSpan.GetDateTimeString()}.txt");
+            string filepath = Path.Combine(basepath ?? Environment.CurrentDirectory, $"log_{FileTimeSpan.GetDateTimeString()}.txt");
 
             _messagesLock = new object();
 
@@ -58,7 +56,7 @@ namespace Logging.Logger
         {
             lock (_messagesLock)
             {
-                string filepath = Path.Combine(Basepath ?? Environment.CurrentDirectory, $"log{FileTimeSpan.GetDateTimeString()}.txt");
+                string filepath = Path.Combine(Basepath ?? Environment.CurrentDirectory, $"log_{FileTimeSpan.GetDateTimeString()}.txt");
 
                 //TODO: logging without load and save all log messages
                 File.WriteAllText(filepath, JsonConvert.SerializeObject(_messages, LogFormat.SerializerSettings));

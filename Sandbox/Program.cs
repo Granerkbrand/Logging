@@ -1,5 +1,6 @@
 ﻿using Logging.Core;
 using Logging.Logger;
+using Logging.Logger.FileUtils;
 using System;
 
 namespace Sandbox
@@ -16,7 +17,8 @@ namespace Sandbox
             loggingSystem.AddLogger(new ConsoleLogger());
             loggingSystem.AddLogger(new FileLogger()
             {
-                LogThreshold = 1000
+                LogThreshold = 1000,
+                FileTimeSpan = FileTimeSpan.DAY
             });
             //loggingSystem.AddLogger(new DatabaseLogger()
             //{

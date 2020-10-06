@@ -14,9 +14,9 @@ namespace Logging.Logger.FileUtils
 
             return fileTimeSpan switch
             {
-                FileTimeSpan.DAY => date.ToString("dd"),
-                FileTimeSpan.WEEK => CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(date, CalendarWeekRule.FirstDay, DayOfWeek.Monday).ToString(),
-                FileTimeSpan.MONTH => date.ToString("MM"),
+                FileTimeSpan.DAY => date.ToString("dd_MM_yyyy"),
+                FileTimeSpan.WEEK => $"{CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(date, CalendarWeekRule.FirstDay, DayOfWeek.Monday)}_{date:yyyy}",
+                FileTimeSpan.MONTH => date.ToString("MM_yyyy"),
                 FileTimeSpan.YEAR => date.ToString("yyyy"),
                 FileTimeSpan.INFINITY => "",
                 _ => "",
