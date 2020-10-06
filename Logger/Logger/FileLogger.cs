@@ -1,5 +1,6 @@
 ﻿using Logging.Core;
 using Logging.Core.Output;
+using Logging.Logger.FileUtils;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,9 @@ namespace Logging.Logger
     public class FileLogger : ILogger
     {
 
-        public string Filepath { get; set; }
+        public string Basepath { get; set; }
+
+        public FileTimeSpan FileTimeSpan { get; set; } = FileTimeSpan.INFINITY;
 
         public int LogThreshold { get; set; }
 
@@ -20,18 +23,21 @@ namespace Logging.Logger
 
         private readonly object _messagesLock;
 
-        public FileLogger()
+        public FileLogger(string basepath = null)
         {
-            Filepath = Path.Combine(Environment.CurrentDirectory, "log.txt");
+            Basepath = basepath;
+            string filepath = Path.Combine(basepath ?? Environment.CurrentDirectory, $"log{FileTimeSpan.GetDateTimeString()}.txt");
 
             _messagesLock = new object();
 
-            if (!File.Exists(Filepath))
+            if (File.Exists(filepath))
             {
-                File.Create(Filepath).Close();
+                _messages = JsonConvert.DeserializeObject<List<LogFormat>>(File.ReadAllText(filepath), LogFormat.SerializerSettings) ?? new List<LogFormat>();
             }
-
-            _messages = JsonConvert.DeserializeObject<List<LogFormat>>(File.ReadAllText(Filepath), LogFormat.SerializerSettings) ?? new List<LogFormat>();
+            else
+            {
+                _messages = new List<LogFormat>();
+            }
         }
 
         public void Log(LogFormat format)
@@ -52,8 +58,10 @@ namespace Logging.Logger
         {
             lock (_messagesLock)
             {
+                string filepath = Path.Combine(Basepath ?? Environment.CurrentDirectory, $"log{FileTimeSpan.GetDateTimeString()}.txt");
+
                 //TODO: logging without load and save all log messages
-                File.WriteAllText(Filepath, JsonConvert.SerializeObject(_messages, LogFormat.SerializerSettings));
+                File.WriteAllText(filepath, JsonConvert.SerializeObject(_messages, LogFormat.SerializerSettings));
             }
         }
     }
